@@ -46,7 +46,7 @@ class CarbEntryListController: WKInterfaceController, IdentifiableClass {
 
     override func willActivate() {
         observers = [
-            NotificationCenter.default.addObserver(forName: .CarbEntriesDidUpdate, object: loopManager.carbStore, queue: nil) { [weak self] (note) in
+            NotificationCenter.default.addObserver(forName: CarbStore.carbEntriesDidUpdate, object: loopManager.carbStore, queue: nil) { [weak self] (note) in
                 self?.log.default("Received CarbEntriesDidUpdate notification: %{public}@. Updating list", String(describing: note.userInfo ?? [:]))
 
                 DispatchQueue.main.async {
@@ -77,7 +77,7 @@ extension CarbEntryListController {
     }
 
     private func reloadCarbEntries() {
-        let start = min(Calendar.current.startOfDay(for: Date()), Date(timeIntervalSinceNow: -2 * loopManager.carbStore.defaultAbsorptionTimes.slow))
+        let start = min(Calendar.current.startOfDay(for: Date()), Date(timeIntervalSinceNow: -loopManager.carbStore.maximumAbsorptionTimeInterval))
 
         loopManager.carbStore.getCarbEntries(start: start) { (result) in
             switch result {

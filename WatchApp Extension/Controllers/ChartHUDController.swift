@@ -28,7 +28,7 @@ final class ChartHUDController: HUDInterfaceController, WKCrownDelegate {
             case .cob:
                 return NSLocalizedString("Active Carbs", comment: "HUD row title for COB")
             case .netBasal:
-                return NSLocalizedString("Net Basal Rate", comment: "HUD row title")
+                return NSLocalizedString("Net Basal Rate", comment: "HUD row title for Net Basal Rate")
             case .reservoirVolume:
                 return NSLocalizedString("Reservoir Volume", comment: "HUD row title for remaining reservoir volume")
             }
@@ -118,7 +118,7 @@ final class ChartHUDController: HUDInterfaceController, WKCrownDelegate {
         super.willActivate()
 
         observers = [
-            NotificationCenter.default.addObserver(forName: .GlucoseSamplesDidChange, object: loopManager.glucoseStore, queue: nil) { [weak self] (note) in
+            NotificationCenter.default.addObserver(forName: GlucoseStore.glucoseSamplesDidChange, object: loopManager.glucoseStore, queue: nil) { [weak self] (note) in
                 self?.log.default("Received GlucoseSamplesDidChange notification: %{public}@. Updating chart", String(describing: note.userInfo ?? [:]))
 
                 DispatchQueue.main.async {
